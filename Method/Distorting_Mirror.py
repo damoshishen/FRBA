@@ -52,14 +52,14 @@ def MinFrame(frame, compress=8):
             ty = j - center_y
 
             theta = math.atan2(ty, tx)
-            radius = math.sqrt((tx, tx) + (ty * ty))
+            radius = math.sqrt((tx * tx) + (ty * ty))
 
             new_x = int(center_x + (math.sqrt(radius) * compress * math.cos(theta)))
             new_y = int(center_y + (math.sqrt(radius) * compress * math.sin(theta)))
 
-            if 0 > new_x > width:
+            if new_x < 0 or new_x >= width:
                 new_x = 0
-            if 0 > new_y > height:
+            if new_y < 0 or new_y >= height:
                 new_y = 0
 
             if new_x < width and new_y < height:
