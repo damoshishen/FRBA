@@ -6,6 +6,9 @@
 """
 import cv2
 import numpy as np
+import random
+from PIL import Image
+from PIL import ImageEnhance
 
 
 def retro_style(img):
@@ -133,6 +136,43 @@ def sketch_style_main(img_path, max_size=800):
     cv2.destroyAllWindows()
 
 
+def oil_style(img):
+    height, width, n = img.shape
+    output = np.zeros((height, width, n), dtype='uint8')
+    for i in range(1, height - 1):
+        for j in range(1, width - 1):
+            rand_choice = random.randint(0, 2)
+            if rand_choice == 0:
+                output[i, j] = img[i + 1, j]
+            elif rand_choice == 1:
+                output[i, j] = img[i - 1, j]
+            else:
+                output[i, j] = img[i, j - 1]
+    return output
+
+
+def color_add(img):
+    image = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    enhancer = ImageEnhance.Color(image)
+    image_colored = enhancer.enhance(2.0)
+    return cv2.cvtColor(np.array(image_colored), cv2.COLOR_RGB2BGR)
+
+
+def oil_style_main(img_path, maxsize=800):
+    img = cv2.imread(img_path)
+    if img is None:
+        print(f"Error: Unable to load image at {img_path}")
+        return
+    oil_img = oil_style(img)
+    final_img = color_add(oil_img)
+
+    final_img = resize_with_aspect_ratio(final_img, maxsize)
+
+    cv2.imshow("Oil Painting Style Image", final_img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
 # 风格选择器
 def choose_style(style_name, img_path):
     if style_name == 'fugu':
@@ -141,5 +181,7 @@ def choose_style(style_name, img_path):
         edge_filter_main(img_path)
     elif style_name == 'sumiao':
         sketch_style_main(img_path)
+    elif style_name == 'youhua':
+        oil_style_main(img_path)
     else:
         print("没有该风格，请重新选择！")
