@@ -7,3 +7,5 @@
 ## 项目更新说明
 + distorting_mirror: 哈哈镜（已调试，2024.7.9）
 + style_change: 风格迁移（复古/黑白/素描/油画 2024.7.10）
++ Face_recognition_model: 人脸识别（自训练模型）  
+（1）dlib方法 2024.7.11
